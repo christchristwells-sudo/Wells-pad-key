@@ -4,248 +4,373 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#101419">
-<title>WELLS PAD | Worship Console</title>
+<meta name="theme-color" content="#0b0f13">
+<title>Wells Pad Studio</title>
 <style>
-:root{--bg:#101419;--panel:#191f26;--panel2:#222a33;--line:#343e49;--text:#f1f5f9;--muted:#8e9aa8;--green:#56f29a;--gold:#e7bd67;--blue:#65b9ff}
+:root {
+ --bg:#0b0f13;--panel:#151b21;--panel2:#1c242c;--line:#303b46;
+ --text:#f2f5f8;--muted:#84919e;--green:#4cf2a0;--gold:#e9c675;
+ --blue:#65baff;--red:#ff626d;
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-button,input{font:inherit}
+button,input,select{font:inherit}
 button{cursor:pointer}
-header{padding:17px 16px 13px;background:#151a20;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+header{padding:15px;background:linear-gradient(110deg,#1d252e,#10151a);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
 .brand{display:flex;align-items:center;gap:11px}
-.logo{width:43px;height:43px;border-radius:11px;background:linear-gradient(135deg,#e9cc85,#8e6324);display:grid;place-items:center;color:#17191c;font-weight:900;font-size:21px}
-h1{font-size:17px;letter-spacing:2px;margin:0}
-.subtitle{font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-top:5px}
-.status{font-size:10px;color:var(--green);letter-spacing:1px}
-main{max-width:1000px;margin:auto;padding:13px}
-.section{border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:13px;margin-bottom:12px}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.section-head strong{font-size:11px;letter-spacing:1.6px}
-.small{font-size:10px;color:var(--muted)}
-.transport{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.action{border:1px solid var(--line);border-radius:9px;padding:13px;color:white;background:var(--panel2);font-weight:bold;letter-spacing:1px}
-.action.play{background:var(--green);color:#101914;border-color:var(--green)}
-.action.stop{color:#ff8585}
-.master-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.control{background:#12171c;border:1px solid var(--line);border-radius:10px;padding:12px}
-.control label{display:flex;justify-content:space-between;gap:8px;font-size:11px;margin-bottom:12px}
-.control output{color:var(--green);font-weight:bold}
-input[type=range]{width:100%;accent-color:var(--green)}
+.logo{width:45px;height:45px;border-radius:10px;background:linear-gradient(145deg,#ffe4a0,#aa7829);display:grid;place-items:center;color:#19160f;font-weight:900;font-size:24px;box-shadow:0 0 18px #e9c67522}
+h1{margin:0;font-size:17px;letter-spacing:2px}
+.subtitle{font-size:9px;color:var(--muted);letter-spacing:1.7px;margin-top:5px}
+.status{font-size:10px;color:var(--green);white-space:nowrap}
+main{max-width:1050px;margin:auto;padding:12px}
+.section{background:linear-gradient(145deg,#171e25,#12171d);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:12px;box-shadow:0 7px 20px #0002}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.head strong{font-size:11px;letter-spacing:1.5px}
+.note{font-size:9px;color:var(--muted);letter-spacing:.8px}
+.transport{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.btn{border:1px solid var(--line);border-radius:8px;padding:13px;background:#222c35;color:white;font-weight:bold;letter-spacing:1px}
+.btn.play{background:linear-gradient(120deg,#6affb0,#36ce83);border-color:#4cf2a0;color:#092015}
+.btn.stop{color:#ff9299}
+.master{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ctrl{padding:12px;background:#0d1217;border:1px solid #2a343e;border-radius:9px;min-width:0}
+.ctrl label{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#dbe2e8;margin-bottom:12px}
+output{color:var(--green);font-weight:bold}
+input[type=range]{width:100%;accent-color:var(--green);cursor:pointer}
 .levels{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.level{border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:7px;padding:12px 4px;font-weight:bold}
-.level.active{color:#101914;background:var(--gold);border-color:var(--gold)}
+.level{background:#222b34;border:1px solid #35414c;color:#aab5c0;border-radius:7px;padding:11px 2px;font-weight:bold;font-size:12px}
+.level small{display:block;font-size:9px;margin-top:5px;letter-spacing:.5px}
+.level.active{background:linear-gradient(145deg,#f2d58f,#c69a45);color:#1b170e;border-color:#f2d58f}
 .layers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.layer{border:1px solid var(--line);background:#12171c;border-radius:9px;padding:10px 8px;min-width:0}
-.layer.active{border-color:#438e68;background:#16251e}
+.layer{min-width:0;padding:10px 8px;background:#0e1318;border:1px solid #2a343e;border-radius:9px;transition:border-color .15s,background .15s}
+.layer.active{border-color:#398b62;background:#14231b}
 .layer-top{display:flex;align-items:center;justify-content:space-between;gap:4px}
-.layer-name{font-size:11px;font-weight:bold;overflow-wrap:anywhere}
-.led{width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#46515d}
-.layer.active .led{background:var(--green);box-shadow:0 0 8px #56f29a}
-.layer input{margin-top:14px}
-.meter{height:5px;background:#29313a;border-radius:4px;margin-top:10px;overflow:hidden}
-.meter span{display:block;width:0;height:100%;background:linear-gradient(90deg,#36d780 65%,#e8d14c 85%,#ff5252)}
-select{background:#12171c;color:white;border:1px solid var(--line);border-radius:7px;padding:10px;width:100%}
-footer{text-align:center;color:#697582;font-size:10px;padding:9px 0 22px;letter-spacing:1px}
-@media(min-width:650px){main{padding:20px}.layers{grid-template-columns:repeat(3,minmax(0,1fr))}.master-grid{grid-template-columns:repeat(3,1fr)}}
+.layer-name{font-size:10px;font-weight:bold;letter-spacing:.4px;overflow-wrap:anywhere}
+.led{width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#4a5661}
+.layer.active .led{background:var(--green);box-shadow:0 0 9px #4cf2a0}
+.layer input{margin-top:13px}
+.meter{height:5px;background:#27313a;border-radius:4px;margin-top:10px;overflow:hidden}
+.meter span{display:block;width:0;height:100%;background:linear-gradient(90deg,#35d880 0%,#d8e84d 78%,#ff4b55 100%);transition:width .09s}
+.select-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+select{width:100%;padding:11px;background:#0d1217;color:white;border:1px solid #35414c;border-radius:7px}
+.hint{font-size:10px;color:var(--muted);line-height:1.5;margin:10px 0 0}
+footer{text-align:center;font-size:9px;color:#64717e;letter-spacing:1.4px;padding:10px 0 22px}
+@media(min-width:650px){
+ main{padding:18px}
+ .master{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .layers{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 </style>
 </head>
 <body>
 <header>
  <div class="brand">
   <div class="logo">W</div>
-  <div><h1>WELLS PAD</h1><div class="subtitle">WORSHIP SOUND CONSOLE</div></div>
+  <div><h1>WELLS PAD</h1><div class="subtitle">WORSHIP ATMOSPHERE STUDIO</div></div>
  </div>
- <div class="status" id="status">● READY</div>
+ <div class="status" id="status">● PRÊT</div>
 </header>
 
 <main>
  <section class="section">
-  <div class="section-head"><strong>TRANSPORT</strong><span class="small">LIVE AUDIO</span></div>
+  <div class="head"><strong>TRANSPORT AUDIO</strong><span class="note">MASTER ENGINE</span></div>
   <div class="transport">
-   <button class="action play" id="play">▶ PLAY</button>
-   <button class="action stop" id="stop">■ STOP</button>
+   <button class="btn play" id="play">▶ DÉMARRER</button>
+   <button class="btn stop" id="stop">■ ARRÊTER</button>
   </div>
  </section>
 
  <section class="section">
-  <div class="section-head"><strong>MASTER CONTROL</strong><span class="small">SORTIE GÉNÉRALE</span></div>
-  <div class="master-grid">
-   <div class="control"><label>MASTER VOLUME <output id="volOut">70%</output></label><input id="volume" type="range" min="0" max="100" value="70"></div>
-   <div class="control"><label>SOFTNESS <output id="softOut">65%</output></label><input id="softness" type="range" min="0" max="100" value="65"></div>
-   <div class="control"><label>FADE <output id="fadeOut">50%</output></label><input id="fade" type="range" min="0" max="100" value="50"></div>
+  <div class="head"><strong>CONTRÔLE MASTER</strong><span class="note">SORTIE GÉNÉRALE</span></div>
+  <div class="master">
+   <div class="ctrl"><label>VOLUME MASTER <output id="volOut">70%</output></label><input id="volume" type="range" min="0" max="100" value="70"></div>
+   <div class="ctrl"><label>DOUCEUR / FILTRE <output id="softOut">65%</output></label><input id="softness" type="range" min="0" max="100" value="65"></div>
+   <div class="ctrl"><label>FONDU / FADE <output id="fadeOut">50%</output></label><input id="fade" type="range" min="0" max="100" value="50"></div>
+   <div class="ctrl"><label>RÉVERBÉRATION <output id="revOut">45%</output></label><input id="reverb" type="range" min="0" max="100" value="45"></div>
+   <div class="ctrl"><label>ÉLARGISSEMENT <output id="widthOut">35%</output></label><input id="width" type="range" min="0" max="100" value="35"></div>
+   <div class="ctrl"><label>BRILLANCE <output id="brightOut">55%</output></label><input id="brightness" type="range" min="0" max="100" value="55"></div>
   </div>
  </section>
 
  <section class="section">
-  <div class="section-head"><strong>SCÈNES / NIVEAUX</strong><span class="small">4 PRESETS</span></div>
+  <div class="head"><strong>SCÈNES DE WORSHIP</strong><span class="note">4 NIVEAUX</span></div>
   <div class="levels">
-   <button class="level active" data-level="0">01<br><small>PRAYER</small></button>
-   <button class="level" data-level="1">02<br><small>WORSHIP</small></button>
-   <button class="level" data-level="2">03<br><small>GLORY</small></button>
-   <button class="level" data-level="3">04<br><small>SWELL</small></button>
+   <button class="level active" data-level="0">01<small>PRAYER</small></button>
+   <button class="level" data-level="1">02<small>WORSHIP</small></button>
+   <button class="level" data-level="2">03<small>GLORY</small></button>
+   <button class="level" data-level="3">04<small>SWELL</small></button>
   </div>
  </section>
 
  <section class="section">
-  <div class="section-head"><strong>SOUND LAYERS</strong><span class="small" id="layerCount">0 ACTIVE</span></div>
+  <div class="head"><strong>COUCHES SONORES</strong><span class="note" id="layerCount">4 ACTIVES</span></div>
   <div class="layers" id="layers"></div>
  </section>
 
  <section class="section">
-  <div class="section-head"><strong>MUSICAL KEY</strong><span class="small">TONALITÉ</span></div>
-  <select id="key">
-   <option value="0">C — Do</option><option value="1">C♯ / D♭</option>
-   <option value="2">D — Ré</option><option value="3">D♯ / E♭</option>
-   <option value="4">E — Mi</option><option value="5">F — Fa</option>
-   <option value="6">F♯ / G♭</option><option value="7">G — Sol</option>
-   <option value="8">G♯ / A♭</option><option value="9">A — La</option>
-   <option value="10">A♯ / B♭</option><option value="11">B — Si</option>
-  </select>
+  <div class="head"><strong>CONFIGURATION MUSICALE</strong><span class="note">TONALITÉ</span></div>
+  <div class="select-wrap">
+   <select id="key" aria-label="Tonalité">
+    <option value="0">C — DO</option><option value="1">C♯ / D♭</option>
+    <option value="2">D — RÉ</option><option value="3">D♯ / E♭</option>
+    <option value="4">E — MI</option><option value="5">F — FA</option>
+    <option value="6">F♯ / G♭</option><option value="7">G — SOL</option>
+    <option value="8">G♯ / A♭</option><option value="9">A — LA</option>
+    <option value="10">A♯ / B♭</option><option value="11">B — SI</option>
+   </select>
+   <select id="octave" aria-label="Octave">
+    <option value="-1">OCTAVE -1</option>
+    <option value="0" selected>OCTAVE 0</option>
+    <option value="1">OCTAVE +1</option>
+   </select>
+  </div>
+  <p class="hint">Active les couches souhaitées, règle leurs volumes et démarre le moteur audio. Pour éviter les coupures, les changements de son sont appliqués progressivement.</p>
  </section>
- <footer>WELLS PAD · WORSHIP ATMOSPHERE · STUDIO EDITION</footer>
+ <footer>WELLS PAD · WORSHIP SOUND CONSOLE · STUDIO</footer>
 </main>
 
 <script>
-(()=>{
+(function(){
 "use strict";
-const names=[
- {name:"AMBIENT",freq:130.81,kind:"pad",defaultOn:true},
- {name:"MOTION",freq:196,kind:"motion",defaultOn:true},
- {name:"SHIMMER",freq:523.25,kind:"shimmer",defaultOn:false},
- {name:"STRINGS",freq:261.63,kind:"strings",defaultOn:true},
- {name:"SUB BASS",freq:65.41,kind:"bass",defaultOn:false},
- {name:"WARM PAD",freq:174.61,kind:"warm",defaultOn:true},
- {name:"AIR",freq:783.99,kind:"air",defaultOn:false},
- {name:"H STRINGS",freq:392,kind:"strings",defaultOn:false},
- {name:"SWELL",freq:220,kind:"swell",defaultOn:false}
-];
+
 const $=id=>document.getElementById(id);
-let ctx=null,master=null,compressor=null,playing=false,level=0;
-let layers=[],voices=[],timer=null;
-let settings=names.map((n,i)=>({on:n.defaultOn,volume:[45,25,18,35,30,42,15,22,0][i]}));
-const layerRoot=$("layers");
-function build(){
- layerRoot.innerHTML="";
- names.forEach((n,i)=>{
+const defs=[
+ {name:"AMBIENT",freq:130.81,type:"pad",on:true,vol:45},
+ {name:"MOTION",freq:196,type:"motion",on:true,vol:25},
+ {name:"SHIMMER",freq:523.25,type:"shimmer",on:false,vol:18},
+ {name:"STRINGS",freq:261.63,type:"strings",on:true,vol:35},
+ {name:"SUB BASS",freq:65.41,type:"bass",on:false,vol:30},
+ {name:"WARM PAD",freq:174.61,type:"warm",on:true,vol:42},
+ {name:"AIR",freq:783.99,type:"air",on:false,vol:15},
+ {name:"H STRINGS",freq:392,type:"strings",on:false,vol:22},
+ {name:"SWELL",freq:220,type:"swell",on:false,vol:0}
+];
+
+let settings=defs.map(x=>({on:x.on,vol:x.vol}));
+let ctx=null,master=null,dryBus=null,wetBus=null,convolver=null,wetGain=null,compressor=null;
+let voices=[],playing=false,raf=0,lastMeter=0;
+const layerEls=[];
+
+function setStatus(text,ok){
+ $("status").textContent=(ok?"● ":"● ")+text;
+ $("status").style.color=ok?"#4cf2a0":"#ff8585";
+}
+function read(id){return Number($(id).value)/100}
+function updateLabels(){
+ const pairs=[["volume","volOut"],["softness","softOut"],["fade","fadeOut"],
+ ["reverb","revOut"],["width","widthOut"],["brightness","brightOut"]];
+ pairs.forEach(([a,b])=>$(b).textContent=$(a).value+"%");
+ $("layerCount").textContent=settings.filter(s=>s.on).length+" ACTIVES";
+}
+function buildLayers(){
+ const root=$("layers");root.innerHTML="";
+ defs.forEach((d,i)=>{
   const el=document.createElement("div");
   el.className="layer"+(settings[i].on?" active":"");
-  el.innerHTML=`<div class="layer-top"><span class="layer-name">${n.name}</span><span class="led"></span></div>
-  <input aria-label="${n.name} volume" type="range" min="0" max="100" value="${settings[i].volume}">
-  <div class="meter"><span></span></div>`;
+  el.innerHTML='<div class="layer-top"><span class="layer-name">'+d.name+'</span><span class="led"></span></div>'+
+   '<input type="range" min="0" max="100" value="'+settings[i].vol+'" aria-label="Volume '+d.name+'">'+
+   '<div class="meter"><span></span></div>';
   el.addEventListener("click",e=>{
-   if(e.target.tagName==="INPUT")return;
-   settings[i].on=!settings[i].on;el.classList.toggle("active",settings[i].on);refresh();
-   if(playing)renderVoices();
+   if(e.target.matches('input'))return;
+   settings[i].on=!settings[i].on;
+   el.classList.toggle("active",settings[i].on);
+   updateLabels();
+   if(playing)syncVoices();
   });
   el.querySelector("input").addEventListener("input",e=>{
-   settings[i].volume=+e.target.value;refresh();
-   if(playing)renderVoices();
+   settings[i].vol=Number(e.target.value);
+   updateLabels();
+   if(playing)syncVoices();
   });
-  layerRoot.appendChild(el);
+  root.appendChild(el);layerEls.push(el);
  });
- refresh();
+ updateLabels();
 }
-function refresh(){
- $("layerCount").textContent=settings.filter(s=>s.on).length+" ACTIVE";
- $("volOut").textContent=$("volume").value+"%";
- $("softOut").textContent=$("softness").value+"%";
- $("fadeOut").textContent=$("fade").value+"%";
+function makeImpulse(){
+ const duration=3.1,decay=3.3;
+ const length=Math.floor(ctx.sampleRate*duration);
+ const buffer=ctx.createBuffer(2,length,ctx.sampleRate);
+ for(let c=0;c<2;c++){
+  const data=buffer.getChannelData(c);
+  for(let i=0;i<length;i++){
+   const t=i/length;
+   data[i]=(Math.random()*2-1)*Math.pow(1-t,decay);
+  }
+ }
+ return buffer;
 }
-function ensureAudio(){
- if(ctx)return;
+function initAudio(){
+ if(ctx)return true;
  const AC=window.AudioContext||window.webkitAudioContext;
- if(!AC){$("status").textContent="AUDIO NON DISPONIBLE";return}
- ctx=new AC();
- master=ctx.createGain();
- compressor=ctx.createDynamicsCompressor();
- compressor.threshold.value=-18;compressor.knee.value=20;
- compressor.ratio.value=3;compressor.attack.value=.04;compressor.release.value=.3;
- master.gain.value=+$("volume").value/100;
- compressor.connect(master);master.connect(ctx.destination);
+ if(!AC){setStatus("AUDIO NON DISPONIBLE",false);return false}
+ try{
+  ctx=new AC();
+  master=ctx.createGain();
+  dryBus=ctx.createGain();
+  wetBus=ctx.createGain();
+  compressor=ctx.createDynamicsCompressor();
+  convolver=ctx.createConvolver();
+  wetGain=ctx.createGain();
+  convolver.buffer=makeImpulse();
+  compressor.threshold.value=-20;
+  compressor.knee.value=22;
+  compressor.ratio.value=3;
+  compressor.attack.value=.025;
+  compressor.release.value=.28;
+  dryBus.connect(compressor);
+  compressor.connect(master);
+  wetBus.connect(convolver);
+  convolver.connect(wetGain);
+  wetGain.connect(master);
+  master.connect(ctx.destination);
+  master.gain.value=read("volume");
+  wetGain.gain.value=.45;
+  return true;
+ }catch(e){
+  console.error(e);setStatus("ERREUR AUDIO",false);return false;
+ }
 }
-function clearVoices(){
- voices.forEach(v=>{
-  try{v.oscs.forEach(o=>{try{o.stop()}catch(e){};try{o.disconnect()}catch(e){}})}catch(e){}
-  try{v.gain.disconnect()}catch(e){}
- });
- voices=[];
-}
-function voiceFor(n,i){
- const g=ctx.createGain();g.gain.value=0;g.connect(compressor);
+function createVoice(def,index){
+ const input=ctx.createGain();
+ const filter=ctx.createBiquadFilter();
+ const panner=ctx.createStereoPanner?ctx.createStereoPanner():null;
+ const send=ctx.createGain();
  const oscs=[];
- const soft=+$("softness").value/100;
- const base=n.freq*Math.pow(2,+$("key").value/12);
- const types={
-  pad:[["sine",1,.55],["triangle",1.003,.28],["sine",2,.12]],
-  motion:[["triangle",1,.45],["sine",1.5,.18],["sine",2,.12]],
-  shimmer:[["sine",2,.35],["triangle",3,.18],["sine",4,.12]],
-  strings:[["sawtooth",1,.16],["sawtooth",1.006,.13],["triangle",2,.15]],
-  bass:[["sine",1,.65],["triangle",2,.1]],
-  warm:[["sine",1,.6],["triangle",1.005,.25],["sine",.5,.1]],
-  air:[["sine",3,.2],["sine",4,.15],["triangle",2,.1]],
-  swell:[["sine",1,.4],["triangle",2,.2],["sine",3,.1]]
+ const softness=read("softness");
+ const brightness=read("brightness");
+ const key=Number($("key").value);
+ const octave=Number($("octave").value);
+ const base=def.freq*Math.pow(2,key/12+octave);
+ const recipes={
+  pad:[["sine",1,.44],["triangle",1.003,.24],["sine",2,.08]],
+  motion:[["triangle",1,.35],["sine",1.5,.14],["sine",2,.09]],
+  shimmer:[["sine",2,.25],["triangle",3,.13],["sine",4,.08]],
+  strings:[["sawtooth",1,.12],["sawtooth",1.006,.10],["triangle",2,.10]],
+  bass:[["sine",1,.65],["triangle",2,.07]],
+  warm:[["sine",1,.46],["triangle",1.004,.20],["sine",.5,.08]],
+  air:[["sine",3,.13],["sine",4,.09],["triangle",2,.06]],
+  swell:[["sine",1,.32],["triangle",2,.15],["sine",3,.07]]
  };
- (types[n.kind]||types.pad).forEach(([type,mult,amp])=>{
-  const o=ctx.createOscillator(),og=ctx.createGain(),filter=ctx.createBiquadFilter();
-  o.type=type;o.frequency.value=base*mult;
-  o.detune.value=(Math.random()-.5)*(n.kind==="strings"?9:3);
-  filter.type="lowpass";
-  filter.frequency.value=300+soft*5200;
-  filter.Q.value=.5+soft*1.2;
-  og.gain.value=amp;
-  o.connect(filter);filter.connect(og);og.connect(g);
-  o.start();oscs.push(o);
+ filter.type="lowpass";
+ filter.frequency.value=250+brightness*10500;
+ filter.Q.value=.6+softness*1.1;
+ input.gain.value=0;
+ input.connect(filter);
+ if(panner){
+  filter.connect(panner);
+  panner.pan.value=(index-4)*.17*read("width");
+  panner.connect(dryBus);
+ }else filter.connect(dryBus);
+ input.connect(send);
+ send.gain.value=.20+read("reverb")*.65;
+ send.connect(wetBus);
+ recipes[def.type].forEach(([type,mult,amp],j)=>{
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type=type;
+  osc.frequency.value=base*mult;
+  osc.detune.value=(Math.random()-.5)*(def.type==="strings"?8:2);
+  gain.gain.value=amp;
+  osc.connect(gain);gain.connect(input);osc.start();
+  oscs.push(osc);
  });
- const s=settings[i].volume/100;
- const target=settings[i].on?s*(+$("volume").value/100)*.13:0;
- const now=ctx.currentTime,duration=.12+(+$("fade").value/100)*1.8;
- g.gain.cancelScheduledValues(now);g.gain.setValueAtTime(g.gain.value,now);
- g.gain.linearRampToValueAtTime(target,now+duration);
- return {oscs,gain:g};
+ const fade=.15+read("fade")*2.8;
+ const target=settings[index].on?(settings[index].vol/100)*.36:0;
+ input.gain.setTargetAtTime(target,ctx.currentTime,Math.max(.08,fade/4));
+ return {input,filter,panner,send,oscs,index};
 }
-function renderVoices(){
+function disposeVoice(v){
+ const now=ctx.currentTime;
+ try{
+  v.input.gain.cancelScheduledValues(now);
+  v.input.gain.setTargetAtTime(0,now,.09);
+ }catch(e){}
+ setTimeout(()=>{
+  v.oscs.forEach(o=>{try{o.stop()}catch(e){}});
+  [v.input,v.filter,v.panner,v.send].forEach(n=>{try{if(n)n.disconnect()}catch(e){}});
+ },450);
+}
+function syncVoices(){
  if(!ctx||!playing)return;
- clearVoices();
- names.forEach((n,i)=>{
-  if(settings[i].on&&settings[i].volume>0){
-   const v=voiceFor(n,i);voices.push(v);
+ const old=voices;voices=[];
+ old.forEach(disposeVoice);
+ defs.forEach((d,i)=>{
+  if(settings[i].on&&settings[i].vol>0){
+   voices.push(createVoice(d,i));
   }
  });
+ updateMix();
 }
-function updateMaster(){
- if(!ctx||!master)return;
- const target=+$("volume").value/100;
- master.gain.setTargetAtTime(target,ctx.currentTime,.06);
- refresh();
- if(playing)renderVoices();
+function updateMix(){
+ if(!ctx)return;
+ const now=ctx.currentTime;
+ master.gain.setTargetAtTime(read("volume"),now,.06);
+ wetGain.gain.setTargetAtTime(read("reverb")*.95,now,.12);
+ voices.forEach(v=>{
+  v.filter.frequency.setTargetAtTime(250+read("brightness")*10500,now,.08);
+  v.filter.Q.setTargetAtTime(.6+read("softness")*1.1,now,.08);
+  if(v.panner)v.panner.pan.setTargetAtTime((v.index-4)*.17*read("width"),now,.1);
+  v.send.gain.setTargetAtTime(.2+read("reverb")*.65,now,.1);
+ });
+ updateLabels();
 }
-$("play").addEventListener("click",async()=>{
- ensureAudio();if(!ctx)return;
- await ctx.resume();
- playing=true;$("status").textContent="● PLAYING";
- $("play").classList.add("active");renderVoices();
+function start(){
+ if(!initAudio())return;
+ ctx.resume().then(()=>{
+  playing=true;
+  $("play").textContent="▶ EN LECTURE";
+  setStatus("MOTEUR ACTIF",true);
+  syncVoices();
+  animateMeters();
+ }).catch(()=>setStatus("IMPOSSIBLE DE DÉMARRER",false));
+}
+function stop(){
+ playing=false;
+ voices.forEach(disposeVoice);voices=[];
+ $("play").textContent="▶ DÉMARRER";
+ layerEls.forEach(el=>el.querySelector(".meter span").style.width="0%");
+ setStatus("PRÊT",true);
+}
+function animateMeters(){
+ if(!playing)return;
+ const now=performance.now();
+ if(now-lastMeter>90){
+  lastMeter=now;
+  layerEls.forEach((el,i)=>{
+   const bar=el.querySelector(".meter span");
+   const target=settings[i].on?Math.min(100,settings[i].vol*.65+Math.random()*23):0;
+   bar.style.width=target+"%";
+  });
+ }
+ raf=requestAnimationFrame(animateMeters);
+}
+$("play").addEventListener("click",start);
+$("stop").addEventListener("click",stop);
+["volume","softness","fade","reverb","width","brightness"].forEach(id=>{
+ $(id).addEventListener("input",()=>{
+  updateLabels();
+  if(id==="fade")return;
+  if(playing)syncVoices();
+  else if(ctx)updateMix();
+ });
 });
-$("stop").addEventListener("click",()=>{
- playing=false;clearVoices();$("status").textContent="● READY";
+$("key").addEventListener("change",()=>{if(playing)syncVoices()});
+$("octave").addEventListener("change",()=>{if(playing)syncVoices()});
+const presets=[
+ {vol:[45,25,18,35,30,42,15,22,0],on:[1,1,0,1,0,1,0,0,0]},
+ {vol:[55,35,30,55,38,50,25,38,0],on:[1,1,1,1,0,1,0,1,0]},
+ {vol:[60,42,45,65,45,55,40,50,15],on:[1,1,1,1,1,1,1,1,0]},
+ {vol:[55,35,50,50,35,50,45,42,85],on:[1,1,1,1,0,1,1,1,1]}
+];
+document.querySelectorAll(".level").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  const p=presets[Number(btn.dataset.level)];
+  settings.forEach((s,i)=>{s.vol=p.vol[i];s.on=!!p.on[i]});
+  document.querySelectorAll(".level").forEach(b=>b.classList.toggle("active",b===btn));
+  buildLayers();
+  if(playing)syncVoices();
+ });
 });
-$("volume").addEventListener("input",updateMaster);
-$("softness").addEventListener("input",()=>{refresh();if(playing)renderVoices()});
-$("fade").addEventListener("input",refresh);
-$("key").addEventListener("change",()=>{if(playing)renderVoices()});
-document.querySelectorAll(".level").forEach(btn=>btn.addEventListener("click",()=>{
- level=+btn.dataset.level;
- document.querySelectorAll(".level").forEach(b=>b.classList.toggle("active",b===btn));
- const presets=[
- [45,25,18,35,30,42,15,22,0],
- [55,35,30,55,38,50,25,38,0],
- [60,42,45,65,45,55,40,50,15],
- [55,35,50,50,35,50,45,42,85]
- ];
- settings.forEach((s,i)=>{s.volume=presets[level][i];});
- build();if(playing)renderVoices();
-}));
-build();
+buildLayers();
 })();
 </script>
 </body>
