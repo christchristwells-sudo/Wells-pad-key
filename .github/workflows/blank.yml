@@ -1,42 +1,1060 @@
 
-name: Construire APK Wells Pad
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>PAD WELLS · Console Worship</title>
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-      - master
-      - principal
-    paths:
-      - '**'
+<style>
+:root{
+  --bg:#030814;
+  --b1:#0f2d78;
+  --b2:#071a4a;
+  --b3:#0a2260;
+  --line:#2c56c4;
+  --cy:#4fd0ff;
+  --fg:#eaf2ff;
+  --mut:#8fa8e0;
+  --y:#ffd24a;
+  color-scheme:dark;
+}
 
-permissions:
-  contents: read
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  -webkit-user-select:none;
+}
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+html,body{
+  background:var(--bg);
+  color:var(--fg);
+}
 
-    steps:
-      - name: Récupérer le projet
-        uses: actions/checkout@v4
+body{
+  margin:0;
+  font-family:Roboto,system-ui,Arial,sans-serif;
+  padding:8px 6px 26px;
+  max-width:620px;
+  margin:auto;
+}
 
-      - name: Installer Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
+.desk{
+  background:linear-gradient(180deg,#0d2a70,#06143a);
+  border-radius:16px;
+  border:2px solid #13245a;
+  box-shadow:0 10px 34px #000c,inset 0 1px 0 #6f9bff40;
+  padding:10px 8px;
+}
 
-      - name: Installer Gradle
-        uses: gradle/actions/setup-gradle@v4
+/* NOUVELLE IDENTITÉ PAD WELLS */
+.top{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-bottom:8px;
+}
 
-      - name: Compiler l'APK
-        run: gradle assembleDebug
+.brand{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  flex-shrink:0;
+  min-width:0;
+}
 
-      - name: Publier l'APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Wells-Pad-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
-          
+.brand-icon{
+  width:35px;
+  height:35px;
+  flex-shrink:0;
+  display:block;
+}
+
+.logo{
+  font-weight:900;
+  letter-spacing:.07em;
+  font-size:11px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+.logo small{
+  display:block;
+  color:var(--cy);
+  font-size:7px;
+  letter-spacing:.1em;
+  margin-top:3px;
+}
+
+/* ÉCRAN LCD */
+.lcd{
+  flex:1;
+  display:flex;
+  gap:6px;
+  align-items:center;
+  background:#041126;
+  border:1px solid #1d3d8f;
+  border-radius:8px;
+  box-shadow:inset 0 0 14px #000;
+  padding:4px 7px;
+  color:var(--cy);
+  font-family:ui-monospace,Menlo,Consolas,monospace;
+  min-width:0;
+}
+
+#lcdKey{
+  font-size:27px;
+  font-weight:700;
+  min-width:30px;
+  text-shadow:0 0 10px #4fd0ff99;
+}
+
+#st{
+  font-size:9px;
+  line-height:1.3;
+  overflow:hidden;
+}
+
+#play{
+  width:65px;
+  flex-shrink:0;
+  height:43px;
+  border-radius:9px;
+  border:1px solid #000;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.04em;
+  color:#fff;
+  background:linear-gradient(180deg,#2fbf6b,#1d8a4a);
+  box-shadow:0 2px 0 #000;
+}
+
+#play.playing{
+  background:linear-gradient(180deg,#e5484d,#a52a2e);
+}
+
+/* SÉLECTION DES NIVEAUX */
+.levels{
+  display:grid;
+  grid-template-columns:30px repeat(4,minmax(0,1fr)) 30px;
+  gap:4px;
+  margin-bottom:8px;
+}
+
+.lv,.st{
+  height:46px;
+  border-radius:8px;
+  border:1px solid #1a3a92;
+  background:linear-gradient(180deg,#143a96,#0c2262);
+  color:var(--fg);
+  font-weight:700;
+  box-shadow:0 2px 0 #000a;
+}
+
+.lv{
+  font-size:11px;
+  line-height:1.15;
+  padding:0 2px;
+}
+
+.lv small{
+  display:block;
+  font-size:8px;
+  color:var(--mut);
+  font-weight:500;
+  margin-top:2px;
+}
+
+.lv.on{
+  background:linear-gradient(180deg,#5cc8ff,#2a7fd8);
+  color:#001a33;
+  border-color:#bfe6ff;
+}
+
+.lv.on small{
+  color:#04284d;
+}
+
+.lv.act{
+  border-color:var(--cy);
+}
+
+.st{
+  font-size:16px;
+}
+
+/* CONSOLE DE MIXAGE */
+.mixer{
+  background:linear-gradient(180deg,#081a4c,#050f2e);
+  border:1px solid #1c3a8c;
+  border-radius:10px;
+  padding:6px 3px;
+  box-shadow:inset 0 2px 8px #000a;
+  display:flex;
+  gap:2px;
+}
+
+.ch{
+  flex:1;
+  min-width:0;
+  background:linear-gradient(180deg,#0f2a70,#091c52);
+  border:1px solid #1d3f9a;
+  border-radius:7px;
+  padding:0 0 5px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  touch-action:none;
+  overflow:hidden;
+}
+
+.ch .bar{
+  height:4px;
+  width:100%;
+  background:var(--c);
+}
+
+.nm{
+  font-size:7.5px;
+  font-weight:700;
+  letter-spacing:.02em;
+  text-align:center;
+  line-height:1.1;
+  min-height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 1px;
+  color:#cfe0ff;
+  overflow-wrap:anywhere;
+}
+
+.mv{
+  display:flex;
+  gap:3px;
+  align-items:stretch;
+  height:178px;
+}
+
+.led{
+  display:flex;
+  flex-direction:column-reverse;
+  gap:2px;
+  width:5px;
+}
+
+.seg{
+  flex:1;
+  border-radius:1px;
+  background:#050b1f;
+}
+
+.seg.on{
+  background:#4fd0ff;
+  box-shadow:0 0 4px #4fd0ff;
+}
+
+.seg:nth-child(n+10).on{
+  background:#ffd24a;
+  box-shadow:0 0 4px #ffd24a;
+}
+
+.slot{
+  position:relative;
+  width:22px;
+  touch-action:none;
+  cursor:pointer;
+  background:repeating-linear-gradient(
+    180deg,
+    transparent 0 17px,
+    #9ec1ff30 17px 18px
+  );
+}
+
+.slot:before{
+  content:"";
+  position:absolute;
+  left:50%;
+  margin-left:-2px;
+  width:4px;
+  top:6px;
+  bottom:6px;
+  background:#020816;
+  border-radius:2px;
+  box-shadow:0 0 0 1px #3a63c8;
+}
+
+.cap{
+  position:absolute;
+  left:-2px;
+  right:-2px;
+  height:30px;
+  border-radius:4px;
+  background:linear-gradient(180deg,#e8f1ff,#9db8ee 45%,#5f7fc4);
+  border:1px solid #0a1a4a;
+  box-shadow:0 3px 6px #000b,inset 0 1px 0 #fff;
+}
+
+.cap:after{
+  content:"";
+  position:absolute;
+  left:3px;
+  right:3px;
+  top:50%;
+  height:2px;
+  background:#0a1a4a;
+  opacity:.8;
+}
+
+.ch.anim .cap{
+  transition:bottom 1.3s ease;
+}
+
+.val{
+  font-size:9.5px;
+  font-family:ui-monospace,Menlo,monospace;
+  color:#bfe6ff;
+  background:#020816;
+  border-radius:3px;
+  padding:1px 4px;
+}
+
+/* RÉGLAGES ROTATIFS */
+.knobs{
+  display:flex;
+  justify-content:space-around;
+  margin:10px 0 8px;
+}
+
+.kn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  width:30%;
+}
+
+.dial{
+  position:relative;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#8fb0f0,#26408a 70%);
+  border:2px solid #050f2e;
+  box-shadow:0 3px 6px #000b,0 0 0 3px #0a1d52;
+  touch-action:none;
+  cursor:ns-resize;
+}
+
+.dial i{
+  position:absolute;
+  left:50%;
+  top:4px;
+  width:3px;
+  height:14px;
+  margin-left:-1.5px;
+  background:#fff;
+  border-radius:2px;
+}
+
+.kn b{
+  font-size:11px;
+  font-family:ui-monospace,Menlo,monospace;
+  color:#bfe6ff;
+}
+
+.kn span{
+  font-size:9px;
+  color:var(--mut);
+  letter-spacing:.05em;
+}
+
+/* CLAVIER */
+.piano{
+  position:relative;
+  height:116px;
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid #0a1a4a;
+  background:#050b1f;
+  box-shadow:0 0 0 2px #13245a;
+}
+
+.piano:before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:5px;
+  background:linear-gradient(90deg,#ffd24a,#4fd0ff);
+  z-index:3;
+}
+
+.wk{
+  position:absolute;
+  top:0;
+  bottom:0;
+  background:linear-gradient(180deg,#f6f8ff,#d5def5);
+  border-right:1px solid #8a98bd;
+  color:#12214f;
+  font-weight:700;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding-bottom:8px;
+  font-size:13px;
+}
+
+.wk.sel{
+  background:linear-gradient(180deg,#bfe6ff,#4fb7ff);
+}
+
+.bk{
+  position:absolute;
+  top:5px;
+  height:62%;
+  background:linear-gradient(180deg,#1a2244,#05081a);
+  border-radius:0 0 4px 4px;
+  z-index:2;
+  color:#9fb6ee;
+  font-size:9px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding-bottom:5px;
+}
+
+.bk.sel{
+  background:linear-gradient(180deg,#4fb7ff,#1c6fc9);
+  color:#fff;
+}
+
+.hint{
+  font-size:9px;
+  color:var(--mut);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin:0 0 5px 2px;
+}
+
+@media(max-width:380px){
+  body{padding:5px 3px 20px}
+  .desk{padding:8px 5px}
+  .brand-icon{width:29px;height:29px}
+  .logo{font-size:9px}
+  .logo small{font-size:6px}
+  .top{gap:4px}
+  .lcd{padding:3px 4px;gap:3px}
+  #lcdKey{font-size:23px;min-width:25px}
+  #st{font-size:8px}
+  #play{width:53px;font-size:10px}
+  .mv{height:155px}
+  .slot{width:18px}
+  .nm{font-size:6.5px}
+}
+</style>
+</head>
+
+<body>
+<div class="desk">
+
+  <div class="top">
+
+    <!-- LOGO INTÉGRÉ : AUCUN FICHIER EXTERNE -->
+    <div class="brand">
+      <svg class="brand-icon"
+           viewBox="0 0 100 100"
+           xmlns="http://www.w3.org/2000/svg"
+           role="img"
+           aria-label="Logo PAD WELLS">
+
+        <defs>
+          <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#9db8ee"/>
+          </linearGradient>
+
+          <linearGradient id="blueEdge" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#4fd0ff"/>
+            <stop offset="100%" stop-color="#593cff"/>
+          </linearGradient>
+
+          <linearGradient id="padCyan" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#08e4ff"/>
+            <stop offset="100%" stop-color="#1684ff"/>
+          </linearGradient>
+
+          <linearGradient id="padPurple" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#d95cff"/>
+            <stop offset="100%" stop-color="#753cff"/>
+          </linearGradient>
+
+          <linearGradient id="padPink" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ff68e9"/>
+            <stop offset="100%" stop-color="#d52bff"/>
+          </linearGradient>
+
+          <linearGradient id="padGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffd45b"/>
+            <stop offset="100%" stop-color="#ff8a25"/>
+          </linearGradient>
+        </defs>
+
+        <rect x="2" y="2" width="96" height="96" rx="19"
+              fill="#050b19"
+              stroke="url(#blueEdge)"
+              stroke-width="1.5"/>
+
+        <!-- Symbole P -->
+        <path d="M21 15 H56
+                 C75 15 85 25 85 40
+                 C85 55 75 64 56 64
+                 H43 L34 82 H21 Z"
+              fill="url(#silver)"/>
+
+        <!-- Touches blanches -->
+        <path d="M23 19 H36 V28 H23 Z
+                 M23 31 H36 V40 H23 Z
+                 M23 43 H36 V52 H23 Z
+                 M23 55 H36 V64 H23 Z
+                 M23 67 H36 V78 H23 Z"
+              fill="#f8fbff"/>
+
+        <!-- Touches noires -->
+        <path d="M23 24 H30 V28 H23 Z
+                 M23 36 H30 V40 H23 Z
+                 M23 48 H30 V52 H23 Z
+                 M23 60 H30 V64 H23 Z"
+              fill="#081226"/>
+
+        <!-- Zone des pads -->
+        <rect x="47" y="28" width="31" height="27" rx="7"
+              fill="#050b19"/>
+
+        <rect x="50" y="31" width="11" height="9" rx="2"
+              fill="url(#padCyan)"/>
+
+        <rect x="64" y="31" width="11" height="9" rx="2"
+              fill="url(#padPurple)"/>
+
+        <rect x="50" y="43" width="11" height="9" rx="2"
+              fill="url(#padPink)"/>
+
+        <rect x="64" y="43" width="11" height="9" rx="2"
+              fill="url(#padGold)"/>
+
+      </svg>
+
+      <div class="logo">
+        PAD WELLS
+        <small>WORSHIP STUDIO</small>
+      </div>
+    </div>
+
+    <div class="lcd">
+      <div id="lcdKey">C</div>
+      <div id="st"></div>
+    </div>
+
+    <button id="play">▶ PLAY</button>
+  </div>
+
+  <div class="levels" id="levels"></div>
+  <div class="mixer" id="mix"></div>
+  <div class="knobs" id="knobs"></div>
+
+  <div class="hint">
+    Clavier · touche une note pour choisir la tonalité
+  </div>
+
+  <div class="piano" id="piano"></div>
+
+</div>
+
+<script>
+"use strict";
+
+const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+// Les 9 couches sonores d'origine
+const L=[
+  ['amb','AMBIENT','#4fd0ff'],
+  ['mot','MOTION','#6fe3a8'],
+  ['shm','SHIMMER','#b99cff'],
+  ['str','STRINGS','#ffc766'],
+  ['sub','BASSE','#ff7a7a'],
+  ['warm','PAD CHAUD','#ff9f5a'],
+  ['air','AIR','#9fe8ff'],
+  ['hstr','CORDES+','#ffd24a'],
+  ['swell','SWELL','#ff8fd0']
+];
+
+const LEVELS=[
+ {
+  amb:40,mot:15,shm:8,str:10,
+  sub:0,warm:0,air:0,hstr:0,swell:0,
+  name:'TRÈS DOUX',
+  hint:'Base tout bas'
+ },
+ {
+  amb:55,mot:30,shm:18,str:25,
+  sub:35,warm:30,air:0,hstr:0,swell:0,
+  name:'DOUX',
+  hint:'+ basse, pad chaud'
+ },
+ {
+  amb:70,mot:48,shm:32,str:42,
+  sub:50,warm:45,air:30,hstr:35,swell:0,
+  name:'PLEIN',
+  hint:'+ air, cordes+'
+ },
+ {
+  amb:85,mot:65,shm:48,str:60,
+  sub:60,warm:58,air:50,hstr:55,swell:45,
+  name:'GRAND',
+  hint:'+ swell'
+ }
+];
+
+const SC={
+  amb:.65,mot:.5,shm:.4,str:.5,
+  sub:.55,warm:.5,air:.35,hstr:.4,swell:.4
+};
+
+const WET={
+  amb:.6,mot:.55,shm:.9,str:.55,
+  sub:.3,warm:.55,air:.9,hstr:.7,swell:.85
+};
+
+const IVS=[0,7,12];
+const SR=16000;
+const T=4;
+const TL={swell:8};
+
+const gv={
+  master:75,
+  fade:5,
+  tone:50
+};
+
+const vals=Object.assign({},LEVELS[0]);
+
+let ctx,out,soft;
+let bus={};
+let cur=null;
+let keyIdx=0;
+let level=1;
+let playing=false;
+let bufs=null;
+let reqId=0;
+
+const meters={};
+const faders={};
+
+const $=id=>document.getElementById(id);
+const F=m=>440*Math.pow(2,(m-69)/12);
+
+// --------------------------------------------------
+// NIVEAUX
+// --------------------------------------------------
+
+const elLv=$('levels');
+
+function mkBtn(cls,txt,fn){
+  const b=document.createElement('button');
+  b.className=cls;
+  b.innerHTML=txt;
+  b.onclick=fn;
+  elLv.appendChild(b);
+  return b;
+}
+
+mkBtn('st','▼',()=>setLevel(Math.max(1,level-1)));
+
+LEVELS.forEach((lv,i)=>{
+  mkBtn(
+    'lv',
+    'N'+(i+1)+'<small>'+lv.name+'</small>',
+    ()=>setLevel(i+1)
+  );
+});
+
+mkBtn('st','▲',()=>setLevel(Math.min(4,level+1)));
+
+function setLevel(n){
+  level=n;
+  Object.assign(vals,LEVELS[n-1]);
+
+  document.querySelectorAll('.ch').forEach(c=>{
+    c.classList.add('anim');
+  });
+
+  L.forEach(l=>{
+    if(faders[l[0]]) faders[l[0]](vals[l[0]],true);
+  });
+
+  setTimeout(()=>{
+    document.querySelectorAll('.ch').forEach(c=>{
+      c.classList.remove('anim');
+    });
+  },1500);
+
+  applyLevels(1.2);
+  applyMaster();
+  draw();
+}
+
+// --------------------------------------------------
+// FADERS
+// --------------------------------------------------
+
+function makeStrip(k,name,color){
+  const d=document.createElement('div');
+
+  d.className='ch';
+  d.style.setProperty('--c',color);
+
+  let segs='';
+
+  for(let i=0;i<12;i++){
+    segs+='<div class="seg"></div>';
+  }
+
+  d.innerHTML=
+    '<div class="bar"></div>'+
+    '<div class="nm">'+name+'</div>'+
+    '<div class="mv">'+
+      '<div class="led">'+segs+'</div>'+
+      '<div class="slot"><div class="cap"></div></div>'+
+    '</div>'+
+    '<div class="val"></div>';
+
+  $('mix').appendChild(d);
+
+  meters[k]={
+    segs:[...d.querySelectorAll('.seg')],
+    disp:0,
+    n:-1,
+    an:null
+  };
+
+  const slot=d.querySelector('.slot');
+  const cap=d.querySelector('.cap');
+  const vl=d.querySelector('.val');
+
+  const draw1=v=>{
+    cap.style.bottom='calc('+v+'% - '+(v*.30)+'px)';
+    vl.textContent=Math.round(v);
+  };
+
+  const fromEv=e=>{
+    const r=slot.getBoundingClientRect();
+
+    const v=Math.round(
+      Math.max(
+        0,
+        Math.min(100,(r.bottom-e.clientY)/r.height*100)
+      )
+    );
+
+    vals[k]=v;
+    draw1(v);
+    applyLevels(.12);
+  };
+
+  slot.addEventListener('pointerdown',e=>{
+    slot.setPointerCapture(e.pointerId);
+    fromEv(e);
+  });
+
+  slot.addEventListener('pointermove',e=>{
+    if(slot.hasPointerCapture(e.pointerId)){
+      fromEv(e);
+    }
+  });
+
+  faders[k]=(v)=>draw1(v);
+
+  draw1(vals[k]);
+}
+
+L.forEach(l=>{
+  makeStrip(l[0],l[1],l[2]);
+});
+
+// --------------------------------------------------
+// BOUTONS ROTATIFS
+// --------------------------------------------------
+
+function makeKnob(label,min,max,step,key,unit){
+  const d=document.createElement('div');
+  d.className='kn';
+
+  d.innerHTML=
+    '<div class="dial"><i></i></div>'+
+    '<b></b>'+
+    '<span>'+label+'</span>';
+
+  $('knobs').appendChild(d);
+
+  const dial=d.querySelector('.dial');
+  const vb=d.querySelector('b');
+
+  const show=()=>{
+    const v=gv[key];
+    vb.textContent=v+unit;
+
+    dial.style.transform='rotate('+
+      (-135+(v-min)/(max-min)*270)+'deg)';
+  };
+
+  let sy=0,sv=0;
+
+  dial.addEventListener('pointerdown',e=>{
+    dial.setPointerCapture(e.pointerId);
+    sy=e.clientY;
+    sv=gv[key];
+  });
+
+  dial.addEventListener('pointermove',e=>{
+    if(!dial.hasPointerCapture(e.pointerId))return;
+
+    let v=sv+(sy-e.clientY)/120*(max-min);
+
+    v=Math.round(
+      Math.max(min,Math.min(max,v))/step
+    )*step;
+
+    gv[key]=v;
+    show();
+    applyMaster();
+  });
+
+  show();
+}
+
+makeKnob('VOLUME',0,100,1,'master','%');
+makeKnob('DOUCEUR',0,100,1,'tone','%');
+makeKnob('FONDU',1,15,.5,'fade',' s');
+
+// --------------------------------------------------
+// CLAVIER : SÉLECTION DE TONALITÉ
+// --------------------------------------------------
+
+(function(){
+  const p=$('piano');
+  const W=[0,2,4,5,7,9,11];
+  const Bk={0:1,1:3,3:6,4:8,5:10};
+
+  W.forEach((n,i)=>{
+    const e=document.createElement('div');
+
+    e.className='wk';
+    e.dataset.n=n;
+    e.textContent=NOTES[n];
+    e.style.left=(i*100/7)+'%';
+    e.style.width=(100/7)+'%';
+
+    p.appendChild(e);
+  });
+
+  for(const i in Bk){
+    const n=Bk[i];
+    const e=document.createElement('div');
+
+    e.className='bk';
+    e.dataset.n=n;
+    e.textContent=NOTES[n];
+    e.style.left=((+i+1)*100/7-4.6)+'%';
+    e.style.width='9.2%';
+
+    p.appendChild(e);
+  }
+
+  p.addEventListener('pointerdown',e=>{
+    const t=e.target.closest('[data-n]');
+    if(!t)return;
+
+    keyIdx=+t.dataset.n;
+
+    if(playing){
+      launch();
+    }else{
+      draw();
+    }
+
+    e.preventDefault();
+  });
+})();
+
+// --------------------------------------------------
+// AFFICHAGE
+// --------------------------------------------------
+
+function draw(msg){
+  document.querySelectorAll('.lv').forEach((b,i)=>{
+    b.classList.toggle('on',i+1===level);
+    b.classList.toggle('act',i+1<level);
+  });
+
+  document.querySelectorAll('[data-n]').forEach(e=>{
+    e.classList.toggle('sel',+e.dataset.n===keyIdx);
+  });
+
+  $('lcdKey').textContent=NOTES[keyIdx];
+
+  $('st').innerHTML=
+    (msg||(playing?'EN COURS':'ARRÊT · touche PLAY'))+
+    '<br>NIVEAU '+level+' · '+LEVELS[level-1].name;
+
+  $('play').textContent=playing?'■ STOP':'▶ PLAY';
+  $('play').classList.toggle('playing',playing);
+}
+
+// --------------------------------------------------
+// AUDIO
+// Les sons sont générés par le moteur audio du code.
+// Aucun fichier sonore externe n'est chargé.
+// --------------------------------------------------
+
+function init(){
+  if(ctx)return;
+
+  try{
+    navigator.audioSession.type='playback';
+  }catch(e){}
+
+  ctx=new (window.AudioContext||window.webkitAudioContext)();
+
+  out=ctx.createGain();
+
+  soft=ctx.createBiquadFilter();
+  soft.type='lowpass';
+  soft.Q.value=.2;
+
+  out.connect(soft);
+  soft.connect(ctx.destination);
+
+  const mk=()=>{
+    const a=ctx.createAnalyser();
+    a.fftSize=256;
+    return a;
+  };
+
+  L.forEach(l=>{
+    const b=ctx.createGain();
+    b.gain.value=0;
+    b.connect(out);
+    bus[l[0]]=b;
+
+    const a=mk();
+    b.connect(a);
+    meters[l[0]].an=a;
+  });
+
+  document.addEventListener('visibilitychange',()=>{
+    if(ctx.state!=='running'){
+      ctx.resume().catch(()=>{});
+    }
+  });
+
+  ctx.onstatechange=()=>{
+    if(ctx.state!=='running'){
+      ctx.resume().catch(()=>{});
+    }
+  };
+
+  applyMaster(true);
+  applyLevels(.001);
+  loop();
+}
+
+const mb8=new Uint8Array(256);
+
+function loop(){
+  if(ctx&&ctx.state==='running'){
+    for(const k in meters){
+      const m=meters[k];
+
+      if(!m.an)continue;
+
+      m.an.getByteTimeDomainData(mb8);
+
+      let p=0;
+
+      for(let i=0;i<256;i++){
+        const v=Math.abs(mb8[i]-128);
+        if(v>p)p=v;
+      }
+
+      m.disp=Math.max(
+        Math.min(1,p/128*4),
+        m.disp*.92
+      );
+
+      const n=Math.round(m.disp*12);
+
+      if(n!==m.n){
+        m.n=n;
+
+        m.segs.forEach((s,i)=>{
+          s.classList.toggle('on',i<n);
+        });
+      }
+    }
+  }
+
+  requestAnimationFrame(loop);
+}
+
+function applyMaster(now){
+  if(!ctx)return;
+
+  const t=ctx.currentTime;
+  const k=now?.001:.12;
+
+  out.gain.setTargetAtTime(
+    gv.master/100*.9,
+    t,
+    k
+  );
+
+  const open=.6+.4*(level-1)/3;
+
+  soft.frequency.setTargetAtTime(
+    (1200+Math.pow(gv.tone/100,2)*9000)*open,
+    t,
+    now?.001:1.2
+  );
+}
+
+function applyLevels(k){
+  if(!ctx)return;
+
+  const t=ctx.currentTime;
+
+  L.forEach(l=>{
+    bus[l[0]].gain.setTargetAtTime(
+      vals[l[0]]/100*SC[l[0]],
+      t,
+      k
+    );
+  });
+}
+
+// --------------------------------------------------
+// RENDU DES 9 COUCHES SONORES
+// --------------------------------------------------
+
+async function renderLayer(layer,idx,ivs,TT){
+  const N=Math.round(SR*TT);
+
+  const oc=new OfflineAudioContext(2,N*2,SR);
+
+  const q=f=>Math.round(f*TT)/TT;
+  const dt=(f,c)=>q(f*Math.pow(2,c/1200));
+
+  con
