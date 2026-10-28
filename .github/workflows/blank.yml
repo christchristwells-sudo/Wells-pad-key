@@ -1,36 +1,252 @@
-# This is a basic workflow to help you get started with Actions
 
-name: CI
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#101419">
+<title>WELLS PAD | Worship Console</title>
+<style>
+:root{--bg:#101419;--panel:#191f26;--panel2:#222a33;--line:#343e49;--text:#f1f5f9;--muted:#8e9aa8;--green:#56f29a;--gold:#e7bd67;--blue:#65b9ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+header{padding:17px 16px 13px;background:#151a20;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:43px;height:43px;border-radius:11px;background:linear-gradient(135deg,#e9cc85,#8e6324);display:grid;place-items:center;color:#17191c;font-weight:900;font-size:21px}
+h1{font-size:17px;letter-spacing:2px;margin:0}
+.subtitle{font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-top:5px}
+.status{font-size:10px;color:var(--green);letter-spacing:1px}
+main{max-width:1000px;margin:auto;padding:13px}
+.section{border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:13px;margin-bottom:12px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.section-head strong{font-size:11px;letter-spacing:1.6px}
+.small{font-size:10px;color:var(--muted)}
+.transport{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action{border:1px solid var(--line);border-radius:9px;padding:13px;color:white;background:var(--panel2);font-weight:bold;letter-spacing:1px}
+.action.play{background:var(--green);color:#101914;border-color:var(--green)}
+.action.stop{color:#ff8585}
+.master-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.control{background:#12171c;border:1px solid var(--line);border-radius:10px;padding:12px}
+.control label{display:flex;justify-content:space-between;gap:8px;font-size:11px;margin-bottom:12px}
+.control output{color:var(--green);font-weight:bold}
+input[type=range]{width:100%;accent-color:var(--green)}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.level{border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:7px;padding:12px 4px;font-weight:bold}
+.level.active{color:#101914;background:var(--gold);border-color:var(--gold)}
+.layers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.layer{border:1px solid var(--line);background:#12171c;border-radius:9px;padding:10px 8px;min-width:0}
+.layer.active{border-color:#438e68;background:#16251e}
+.layer-top{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.layer-name{font-size:11px;font-weight:bold;overflow-wrap:anywhere}
+.led{width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#46515d}
+.layer.active .led{background:var(--green);box-shadow:0 0 8px #56f29a}
+.layer input{margin-top:14px}
+.meter{height:5px;background:#29313a;border-radius:4px;margin-top:10px;overflow:hidden}
+.meter span{display:block;width:0;height:100%;background:linear-gradient(90deg,#36d780 65%,#e8d14c 85%,#ff5252)}
+select{background:#12171c;color:white;border:1px solid var(--line);border-radius:7px;padding:10px;width:100%}
+footer{text-align:center;color:#697582;font-size:10px;padding:9px 0 22px;letter-spacing:1px}
+@media(min-width:650px){main{padding:20px}.layers{grid-template-columns:repeat(3,minmax(0,1fr))}.master-grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">
+  <div class="logo">W</div>
+  <div><h1>WELLS PAD</h1><div class="subtitle">WORSHIP SOUND CONSOLE</div></div>
+ </div>
+ <div class="status" id="status">● READY</div>
+</header>
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+<main>
+ <section class="section">
+  <div class="section-head"><strong>TRANSPORT</strong><span class="small">LIVE AUDIO</span></div>
+  <div class="transport">
+   <button class="action play" id="play">▶ PLAY</button>
+   <button class="action stop" id="stop">■ STOP</button>
+  </div>
+ </section>
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+ <section class="section">
+  <div class="section-head"><strong>MASTER CONTROL</strong><span class="small">SORTIE GÉNÉRALE</span></div>
+  <div class="master-grid">
+   <div class="control"><label>MASTER VOLUME <output id="volOut">70%</output></label><input id="volume" type="range" min="0" max="100" value="70"></div>
+   <div class="control"><label>SOFTNESS <output id="softOut">65%</output></label><input id="softness" type="range" min="0" max="100" value="65"></div>
+   <div class="control"><label>FADE <output id="fadeOut">50%</output></label><input id="fade" type="range" min="0" max="100" value="50"></div>
+  </div>
+ </section>
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+ <section class="section">
+  <div class="section-head"><strong>SCÈNES / NIVEAUX</strong><span class="small">4 PRESETS</span></div>
+  <div class="levels">
+   <button class="level active" data-level="0">01<br><small>PRAYER</small></button>
+   <button class="level" data-level="1">02<br><small>WORSHIP</small></button>
+   <button class="level" data-level="2">03<br><small>GLORY</small></button>
+   <button class="level" data-level="3">04<br><small>SWELL</small></button>
+  </div>
+ </section>
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+ <section class="section">
+  <div class="section-head"><strong>SOUND LAYERS</strong><span class="small" id="layerCount">0 ACTIVE</span></div>
+  <div class="layers" id="layers"></div>
+ </section>
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+ <section class="section">
+  <div class="section-head"><strong>MUSICAL KEY</strong><span class="small">TONALITÉ</span></div>
+  <select id="key">
+   <option value="0">C — Do</option><option value="1">C♯ / D♭</option>
+   <option value="2">D — Ré</option><option value="3">D♯ / E♭</option>
+   <option value="4">E — Mi</option><option value="5">F — Fa</option>
+   <option value="6">F♯ / G♭</option><option value="7">G — Sol</option>
+   <option value="8">G♯ / A♭</option><option value="9">A — La</option>
+   <option value="10">A♯ / B♭</option><option value="11">B — Si</option>
+  </select>
+ </section>
+ <footer>WELLS PAD · WORSHIP ATMOSPHERE · STUDIO EDITION</footer>
+</main>
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+<script>
+(()=>{
+"use strict";
+const names=[
+ {name:"AMBIENT",freq:130.81,kind:"pad",defaultOn:true},
+ {name:"MOTION",freq:196,kind:"motion",defaultOn:true},
+ {name:"SHIMMER",freq:523.25,kind:"shimmer",defaultOn:false},
+ {name:"STRINGS",freq:261.63,kind:"strings",defaultOn:true},
+ {name:"SUB BASS",freq:65.41,kind:"bass",defaultOn:false},
+ {name:"WARM PAD",freq:174.61,kind:"warm",defaultOn:true},
+ {name:"AIR",freq:783.99,kind:"air",defaultOn:false},
+ {name:"H STRINGS",freq:392,kind:"strings",defaultOn:false},
+ {name:"SWELL",freq:220,kind:"swell",defaultOn:false}
+];
+const $=id=>document.getElementById(id);
+let ctx=null,master=null,compressor=null,playing=false,level=0;
+let layers=[],voices=[],timer=null;
+let settings=names.map((n,i)=>({on:n.defaultOn,volume:[45,25,18,35,30,42,15,22,0][i]}));
+const layerRoot=$("layers");
+function build(){
+ layerRoot.innerHTML="";
+ names.forEach((n,i)=>{
+  const el=document.createElement("div");
+  el.className="layer"+(settings[i].on?" active":"");
+  el.innerHTML=`<div class="layer-top"><span class="layer-name">${n.name}</span><span class="led"></span></div>
+  <input aria-label="${n.name} volume" type="range" min="0" max="100" value="${settings[i].volume}">
+  <div class="meter"><span></span></div>`;
+  el.addEventListener("click",e=>{
+   if(e.target.tagName==="INPUT")return;
+   settings[i].on=!settings[i].on;el.classList.toggle("active",settings[i].on);refresh();
+   if(playing)renderVoices();
+  });
+  el.querySelector("input").addEventListener("input",e=>{
+   settings[i].volume=+e.target.value;refresh();
+   if(playing)renderVoices();
+  });
+  layerRoot.appendChild(el);
+ });
+ refresh();
+}
+function refresh(){
+ $("layerCount").textContent=settings.filter(s=>s.on).length+" ACTIVE";
+ $("volOut").textContent=$("volume").value+"%";
+ $("softOut").textContent=$("softness").value+"%";
+ $("fadeOut").textContent=$("fade").value+"%";
+}
+function ensureAudio(){
+ if(ctx)return;
+ const AC=window.AudioContext||window.webkitAudioContext;
+ if(!AC){$("status").textContent="AUDIO NON DISPONIBLE";return}
+ ctx=new AC();
+ master=ctx.createGain();
+ compressor=ctx.createDynamicsCompressor();
+ compressor.threshold.value=-18;compressor.knee.value=20;
+ compressor.ratio.value=3;compressor.attack.value=.04;compressor.release.value=.3;
+ master.gain.value=+$("volume").value/100;
+ compressor.connect(master);master.connect(ctx.destination);
+}
+function clearVoices(){
+ voices.forEach(v=>{
+  try{v.oscs.forEach(o=>{try{o.stop()}catch(e){};try{o.disconnect()}catch(e){}})}catch(e){}
+  try{v.gain.disconnect()}catch(e){}
+ });
+ voices=[];
+}
+function voiceFor(n,i){
+ const g=ctx.createGain();g.gain.value=0;g.connect(compressor);
+ const oscs=[];
+ const soft=+$("softness").value/100;
+ const base=n.freq*Math.pow(2,+$("key").value/12);
+ const types={
+  pad:[["sine",1,.55],["triangle",1.003,.28],["sine",2,.12]],
+  motion:[["triangle",1,.45],["sine",1.5,.18],["sine",2,.12]],
+  shimmer:[["sine",2,.35],["triangle",3,.18],["sine",4,.12]],
+  strings:[["sawtooth",1,.16],["sawtooth",1.006,.13],["triangle",2,.15]],
+  bass:[["sine",1,.65],["triangle",2,.1]],
+  warm:[["sine",1,.6],["triangle",1.005,.25],["sine",.5,.1]],
+  air:[["sine",3,.2],["sine",4,.15],["triangle",2,.1]],
+  swell:[["sine",1,.4],["triangle",2,.2],["sine",3,.1]]
+ };
+ (types[n.kind]||types.pad).forEach(([type,mult,amp])=>{
+  const o=ctx.createOscillator(),og=ctx.createGain(),filter=ctx.createBiquadFilter();
+  o.type=type;o.frequency.value=base*mult;
+  o.detune.value=(Math.random()-.5)*(n.kind==="strings"?9:3);
+  filter.type="lowpass";
+  filter.frequency.value=300+soft*5200;
+  filter.Q.value=.5+soft*1.2;
+  og.gain.value=amp;
+  o.connect(filter);filter.connect(og);og.connect(g);
+  o.start();oscs.push(o);
+ });
+ const s=settings[i].volume/100;
+ const target=settings[i].on?s*(+$("volume").value/100)*.13:0;
+ const now=ctx.currentTime,duration=.12+(+$("fade").value/100)*1.8;
+ g.gain.cancelScheduledValues(now);g.gain.setValueAtTime(g.gain.value,now);
+ g.gain.linearRampToValueAtTime(target,now+duration);
+ return {oscs,gain:g};
+}
+function renderVoices(){
+ if(!ctx||!playing)return;
+ clearVoices();
+ names.forEach((n,i)=>{
+  if(settings[i].on&&settings[i].volume>0){
+   const v=voiceFor(n,i);voices.push(v);
+  }
+ });
+}
+function updateMaster(){
+ if(!ctx||!master)return;
+ const target=+$("volume").value/100;
+ master.gain.setTargetAtTime(target,ctx.currentTime,.06);
+ refresh();
+ if(playing)renderVoices();
+}
+$("play").addEventListener("click",async()=>{
+ ensureAudio();if(!ctx)return;
+ await ctx.resume();
+ playing=true;$("status").textContent="● PLAYING";
+ $("play").classList.add("active");renderVoices();
+});
+$("stop").addEventListener("click",()=>{
+ playing=false;clearVoices();$("status").textContent="● READY";
+});
+$("volume").addEventListener("input",updateMaster);
+$("softness").addEventListener("input",()=>{refresh();if(playing)renderVoices()});
+$("fade").addEventListener("input",refresh);
+$("key").addEventListener("change",()=>{if(playing)renderVoices()});
+document.querySelectorAll(".level").forEach(btn=>btn.addEventListener("click",()=>{
+ level=+btn.dataset.level;
+ document.querySelectorAll(".level").forEach(b=>b.classList.toggle("active",b===btn));
+ const presets=[
+ [45,25,18,35,30,42,15,22,0],
+ [55,35,30,55,38,50,25,38,0],
+ [60,42,45,65,45,55,40,50,15],
+ [55,35,50,50,35,50,45,42,85]
+ ];
+ settings.forEach((s,i)=>{s.volume=presets[level][i];});
+ build();if(playing)renderVoices();
+}));
+build();
+})();
+</script>
+</body>
+</html>
