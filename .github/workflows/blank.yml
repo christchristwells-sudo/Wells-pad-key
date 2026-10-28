@@ -1,377 +1,42 @@
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#0b0f13">
-<title>Wells Pad Studio</title>
-<style>
-:root {
- --bg:#0b0f13;--panel:#151b21;--panel2:#1c242c;--line:#303b46;
- --text:#f2f5f8;--muted:#84919e;--green:#4cf2a0;--gold:#e9c675;
- --blue:#65baff;--red:#ff626d;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-header{padding:15px;background:linear-gradient(110deg,#1d252e,#10151a);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
-.brand{display:flex;align-items:center;gap:11px}
-.logo{width:45px;height:45px;border-radius:10px;background:linear-gradient(145deg,#ffe4a0,#aa7829);display:grid;place-items:center;color:#19160f;font-weight:900;font-size:24px;box-shadow:0 0 18px #e9c67522}
-h1{margin:0;font-size:17px;letter-spacing:2px}
-.subtitle{font-size:9px;color:var(--muted);letter-spacing:1.7px;margin-top:5px}
-.status{font-size:10px;color:var(--green);white-space:nowrap}
-main{max-width:1050px;margin:auto;padding:12px}
-.section{background:linear-gradient(145deg,#171e25,#12171d);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:12px;box-shadow:0 7px 20px #0002}
-.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
-.head strong{font-size:11px;letter-spacing:1.5px}
-.note{font-size:9px;color:var(--muted);letter-spacing:.8px}
-.transport{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.btn{border:1px solid var(--line);border-radius:8px;padding:13px;background:#222c35;color:white;font-weight:bold;letter-spacing:1px}
-.btn.play{background:linear-gradient(120deg,#6affb0,#36ce83);border-color:#4cf2a0;color:#092015}
-.btn.stop{color:#ff9299}
-.master{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.ctrl{padding:12px;background:#0d1217;border:1px solid #2a343e;border-radius:9px;min-width:0}
-.ctrl label{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#dbe2e8;margin-bottom:12px}
-output{color:var(--green);font-weight:bold}
-input[type=range]{width:100%;accent-color:var(--green);cursor:pointer}
-.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.level{background:#222b34;border:1px solid #35414c;color:#aab5c0;border-radius:7px;padding:11px 2px;font-weight:bold;font-size:12px}
-.level small{display:block;font-size:9px;margin-top:5px;letter-spacing:.5px}
-.level.active{background:linear-gradient(145deg,#f2d58f,#c69a45);color:#1b170e;border-color:#f2d58f}
-.layers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.layer{min-width:0;padding:10px 8px;background:#0e1318;border:1px solid #2a343e;border-radius:9px;transition:border-color .15s,background .15s}
-.layer.active{border-color:#398b62;background:#14231b}
-.layer-top{display:flex;align-items:center;justify-content:space-between;gap:4px}
-.layer-name{font-size:10px;font-weight:bold;letter-spacing:.4px;overflow-wrap:anywhere}
-.led{width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#4a5661}
-.layer.active .led{background:var(--green);box-shadow:0 0 9px #4cf2a0}
-.layer input{margin-top:13px}
-.meter{height:5px;background:#27313a;border-radius:4px;margin-top:10px;overflow:hidden}
-.meter span{display:block;width:0;height:100%;background:linear-gradient(90deg,#35d880 0%,#d8e84d 78%,#ff4b55 100%);transition:width .09s}
-.select-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-select{width:100%;padding:11px;background:#0d1217;color:white;border:1px solid #35414c;border-radius:7px}
-.hint{font-size:10px;color:var(--muted);line-height:1.5;margin:10px 0 0}
-footer{text-align:center;font-size:9px;color:#64717e;letter-spacing:1.4px;padding:10px 0 22px}
-@media(min-width:650px){
- main{padding:18px}
- .master{grid-template-columns:repeat(3,minmax(0,1fr))}
- .layers{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-</style>
-</head>
-<body>
-<header>
- <div class="brand">
-  <div class="logo">W</div>
-  <div><h1>WELLS PAD</h1><div class="subtitle">WORSHIP ATMOSPHERE STUDIO</div></div>
- </div>
- <div class="status" id="status">● PRÊT</div>
-</header>
+name: Construire APK Wells Pad
 
-<main>
- <section class="section">
-  <div class="head"><strong>TRANSPORT AUDIO</strong><span class="note">MASTER ENGINE</span></div>
-  <div class="transport">
-   <button class="btn play" id="play">▶ DÉMARRER</button>
-   <button class="btn stop" id="stop">■ ARRÊTER</button>
-  </div>
- </section>
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - principal
+    paths:
+      - '**'
 
- <section class="section">
-  <div class="head"><strong>CONTRÔLE MASTER</strong><span class="note">SORTIE GÉNÉRALE</span></div>
-  <div class="master">
-   <div class="ctrl"><label>VOLUME MASTER <output id="volOut">70%</output></label><input id="volume" type="range" min="0" max="100" value="70"></div>
-   <div class="ctrl"><label>DOUCEUR / FILTRE <output id="softOut">65%</output></label><input id="softness" type="range" min="0" max="100" value="65"></div>
-   <div class="ctrl"><label>FONDU / FADE <output id="fadeOut">50%</output></label><input id="fade" type="range" min="0" max="100" value="50"></div>
-   <div class="ctrl"><label>RÉVERBÉRATION <output id="revOut">45%</output></label><input id="reverb" type="range" min="0" max="100" value="45"></div>
-   <div class="ctrl"><label>ÉLARGISSEMENT <output id="widthOut">35%</output></label><input id="width" type="range" min="0" max="100" value="35"></div>
-   <div class="ctrl"><label>BRILLANCE <output id="brightOut">55%</output></label><input id="brightness" type="range" min="0" max="100" value="55"></div>
-  </div>
- </section>
+permissions:
+  contents: read
 
- <section class="section">
-  <div class="head"><strong>SCÈNES DE WORSHIP</strong><span class="note">4 NIVEAUX</span></div>
-  <div class="levels">
-   <button class="level active" data-level="0">01<small>PRAYER</small></button>
-   <button class="level" data-level="1">02<small>WORSHIP</small></button>
-   <button class="level" data-level="2">03<small>GLORY</small></button>
-   <button class="level" data-level="3">04<small>SWELL</small></button>
-  </div>
- </section>
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
- <section class="section">
-  <div class="head"><strong>COUCHES SONORES</strong><span class="note" id="layerCount">4 ACTIVES</span></div>
-  <div class="layers" id="layers"></div>
- </section>
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v4
 
- <section class="section">
-  <div class="head"><strong>CONFIGURATION MUSICALE</strong><span class="note">TONALITÉ</span></div>
-  <div class="select-wrap">
-   <select id="key" aria-label="Tonalité">
-    <option value="0">C — DO</option><option value="1">C♯ / D♭</option>
-    <option value="2">D — RÉ</option><option value="3">D♯ / E♭</option>
-    <option value="4">E — MI</option><option value="5">F — FA</option>
-    <option value="6">F♯ / G♭</option><option value="7">G — SOL</option>
-    <option value="8">G♯ / A♭</option><option value="9">A — LA</option>
-    <option value="10">A♯ / B♭</option><option value="11">B — SI</option>
-   </select>
-   <select id="octave" aria-label="Octave">
-    <option value="-1">OCTAVE -1</option>
-    <option value="0" selected>OCTAVE 0</option>
-    <option value="1">OCTAVE +1</option>
-   </select>
-  </div>
-  <p class="hint">Active les couches souhaitées, règle leurs volumes et démarre le moteur audio. Pour éviter les coupures, les changements de son sont appliqués progressivement.</p>
- </section>
- <footer>WELLS PAD · WORSHIP SOUND CONSOLE · STUDIO</footer>
-</main>
+      - name: Installer Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
-<script>
-(function(){
-"use strict";
+      - name: Installer Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-const $=id=>document.getElementById(id);
-const defs=[
- {name:"AMBIENT",freq:130.81,type:"pad",on:true,vol:45},
- {name:"MOTION",freq:196,type:"motion",on:true,vol:25},
- {name:"SHIMMER",freq:523.25,type:"shimmer",on:false,vol:18},
- {name:"STRINGS",freq:261.63,type:"strings",on:true,vol:35},
- {name:"SUB BASS",freq:65.41,type:"bass",on:false,vol:30},
- {name:"WARM PAD",freq:174.61,type:"warm",on:true,vol:42},
- {name:"AIR",freq:783.99,type:"air",on:false,vol:15},
- {name:"H STRINGS",freq:392,type:"strings",on:false,vol:22},
- {name:"SWELL",freq:220,type:"swell",on:false,vol:0}
-];
+      - name: Compiler l'APK
+        run: gradle assembleDebug
 
-let settings=defs.map(x=>({on:x.on,vol:x.vol}));
-let ctx=null,master=null,dryBus=null,wetBus=null,convolver=null,wetGain=null,compressor=null;
-let voices=[],playing=false,raf=0,lastMeter=0;
-const layerEls=[];
-
-function setStatus(text,ok){
- $("status").textContent=(ok?"● ":"● ")+text;
- $("status").style.color=ok?"#4cf2a0":"#ff8585";
-}
-function read(id){return Number($(id).value)/100}
-function updateLabels(){
- const pairs=[["volume","volOut"],["softness","softOut"],["fade","fadeOut"],
- ["reverb","revOut"],["width","widthOut"],["brightness","brightOut"]];
- pairs.forEach(([a,b])=>$(b).textContent=$(a).value+"%");
- $("layerCount").textContent=settings.filter(s=>s.on).length+" ACTIVES";
-}
-function buildLayers(){
- const root=$("layers");root.innerHTML="";
- defs.forEach((d,i)=>{
-  const el=document.createElement("div");
-  el.className="layer"+(settings[i].on?" active":"");
-  el.innerHTML='<div class="layer-top"><span class="layer-name">'+d.name+'</span><span class="led"></span></div>'+
-   '<input type="range" min="0" max="100" value="'+settings[i].vol+'" aria-label="Volume '+d.name+'">'+
-   '<div class="meter"><span></span></div>';
-  el.addEventListener("click",e=>{
-   if(e.target.matches('input'))return;
-   settings[i].on=!settings[i].on;
-   el.classList.toggle("active",settings[i].on);
-   updateLabels();
-   if(playing)syncVoices();
-  });
-  el.querySelector("input").addEventListener("input",e=>{
-   settings[i].vol=Number(e.target.value);
-   updateLabels();
-   if(playing)syncVoices();
-  });
-  root.appendChild(el);layerEls.push(el);
- });
- updateLabels();
-}
-function makeImpulse(){
- const duration=3.1,decay=3.3;
- const length=Math.floor(ctx.sampleRate*duration);
- const buffer=ctx.createBuffer(2,length,ctx.sampleRate);
- for(let c=0;c<2;c++){
-  const data=buffer.getChannelData(c);
-  for(let i=0;i<length;i++){
-   const t=i/length;
-   data[i]=(Math.random()*2-1)*Math.pow(1-t,decay);
-  }
- }
- return buffer;
-}
-function initAudio(){
- if(ctx)return true;
- const AC=window.AudioContext||window.webkitAudioContext;
- if(!AC){setStatus("AUDIO NON DISPONIBLE",false);return false}
- try{
-  ctx=new AC();
-  master=ctx.createGain();
-  dryBus=ctx.createGain();
-  wetBus=ctx.createGain();
-  compressor=ctx.createDynamicsCompressor();
-  convolver=ctx.createConvolver();
-  wetGain=ctx.createGain();
-  convolver.buffer=makeImpulse();
-  compressor.threshold.value=-20;
-  compressor.knee.value=22;
-  compressor.ratio.value=3;
-  compressor.attack.value=.025;
-  compressor.release.value=.28;
-  dryBus.connect(compressor);
-  compressor.connect(master);
-  wetBus.connect(convolver);
-  convolver.connect(wetGain);
-  wetGain.connect(master);
-  master.connect(ctx.destination);
-  master.gain.value=read("volume");
-  wetGain.gain.value=.45;
-  return true;
- }catch(e){
-  console.error(e);setStatus("ERREUR AUDIO",false);return false;
- }
-}
-function createVoice(def,index){
- const input=ctx.createGain();
- const filter=ctx.createBiquadFilter();
- const panner=ctx.createStereoPanner?ctx.createStereoPanner():null;
- const send=ctx.createGain();
- const oscs=[];
- const softness=read("softness");
- const brightness=read("brightness");
- const key=Number($("key").value);
- const octave=Number($("octave").value);
- const base=def.freq*Math.pow(2,key/12+octave);
- const recipes={
-  pad:[["sine",1,.44],["triangle",1.003,.24],["sine",2,.08]],
-  motion:[["triangle",1,.35],["sine",1.5,.14],["sine",2,.09]],
-  shimmer:[["sine",2,.25],["triangle",3,.13],["sine",4,.08]],
-  strings:[["sawtooth",1,.12],["sawtooth",1.006,.10],["triangle",2,.10]],
-  bass:[["sine",1,.65],["triangle",2,.07]],
-  warm:[["sine",1,.46],["triangle",1.004,.20],["sine",.5,.08]],
-  air:[["sine",3,.13],["sine",4,.09],["triangle",2,.06]],
-  swell:[["sine",1,.32],["triangle",2,.15],["sine",3,.07]]
- };
- filter.type="lowpass";
- filter.frequency.value=250+brightness*10500;
- filter.Q.value=.6+softness*1.1;
- input.gain.value=0;
- input.connect(filter);
- if(panner){
-  filter.connect(panner);
-  panner.pan.value=(index-4)*.17*read("width");
-  panner.connect(dryBus);
- }else filter.connect(dryBus);
- input.connect(send);
- send.gain.value=.20+read("reverb")*.65;
- send.connect(wetBus);
- recipes[def.type].forEach(([type,mult,amp],j)=>{
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
-  osc.type=type;
-  osc.frequency.value=base*mult;
-  osc.detune.value=(Math.random()-.5)*(def.type==="strings"?8:2);
-  gain.gain.value=amp;
-  osc.connect(gain);gain.connect(input);osc.start();
-  oscs.push(osc);
- });
- const fade=.15+read("fade")*2.8;
- const target=settings[index].on?(settings[index].vol/100)*.36:0;
- input.gain.setTargetAtTime(target,ctx.currentTime,Math.max(.08,fade/4));
- return {input,filter,panner,send,oscs,index};
-}
-function disposeVoice(v){
- const now=ctx.currentTime;
- try{
-  v.input.gain.cancelScheduledValues(now);
-  v.input.gain.setTargetAtTime(0,now,.09);
- }catch(e){}
- setTimeout(()=>{
-  v.oscs.forEach(o=>{try{o.stop()}catch(e){}});
-  [v.input,v.filter,v.panner,v.send].forEach(n=>{try{if(n)n.disconnect()}catch(e){}});
- },450);
-}
-function syncVoices(){
- if(!ctx||!playing)return;
- const old=voices;voices=[];
- old.forEach(disposeVoice);
- defs.forEach((d,i)=>{
-  if(settings[i].on&&settings[i].vol>0){
-   voices.push(createVoice(d,i));
-  }
- });
- updateMix();
-}
-function updateMix(){
- if(!ctx)return;
- const now=ctx.currentTime;
- master.gain.setTargetAtTime(read("volume"),now,.06);
- wetGain.gain.setTargetAtTime(read("reverb")*.95,now,.12);
- voices.forEach(v=>{
-  v.filter.frequency.setTargetAtTime(250+read("brightness")*10500,now,.08);
-  v.filter.Q.setTargetAtTime(.6+read("softness")*1.1,now,.08);
-  if(v.panner)v.panner.pan.setTargetAtTime((v.index-4)*.17*read("width"),now,.1);
-  v.send.gain.setTargetAtTime(.2+read("reverb")*.65,now,.1);
- });
- updateLabels();
-}
-function start(){
- if(!initAudio())return;
- ctx.resume().then(()=>{
-  playing=true;
-  $("play").textContent="▶ EN LECTURE";
-  setStatus("MOTEUR ACTIF",true);
-  syncVoices();
-  animateMeters();
- }).catch(()=>setStatus("IMPOSSIBLE DE DÉMARRER",false));
-}
-function stop(){
- playing=false;
- voices.forEach(disposeVoice);voices=[];
- $("play").textContent="▶ DÉMARRER";
- layerEls.forEach(el=>el.querySelector(".meter span").style.width="0%");
- setStatus("PRÊT",true);
-}
-function animateMeters(){
- if(!playing)return;
- const now=performance.now();
- if(now-lastMeter>90){
-  lastMeter=now;
-  layerEls.forEach((el,i)=>{
-   const bar=el.querySelector(".meter span");
-   const target=settings[i].on?Math.min(100,settings[i].vol*.65+Math.random()*23):0;
-   bar.style.width=target+"%";
-  });
- }
- raf=requestAnimationFrame(animateMeters);
-}
-$("play").addEventListener("click",start);
-$("stop").addEventListener("click",stop);
-["volume","softness","fade","reverb","width","brightness"].forEach(id=>{
- $(id).addEventListener("input",()=>{
-  updateLabels();
-  if(id==="fade")return;
-  if(playing)syncVoices();
-  else if(ctx)updateMix();
- });
-});
-$("key").addEventListener("change",()=>{if(playing)syncVoices()});
-$("octave").addEventListener("change",()=>{if(playing)syncVoices()});
-const presets=[
- {vol:[45,25,18,35,30,42,15,22,0],on:[1,1,0,1,0,1,0,0,0]},
- {vol:[55,35,30,55,38,50,25,38,0],on:[1,1,1,1,0,1,0,1,0]},
- {vol:[60,42,45,65,45,55,40,50,15],on:[1,1,1,1,1,1,1,1,0]},
- {vol:[55,35,50,50,35,50,45,42,85],on:[1,1,1,1,0,1,1,1,1]}
-];
-document.querySelectorAll(".level").forEach(btn=>{
- btn.addEventListener("click",()=>{
-  const p=presets[Number(btn.dataset.level)];
-  settings.forEach((s,i)=>{s.vol=p.vol[i];s.on=!!p.on[i]});
-  document.querySelectorAll(".level").forEach(b=>b.classList.toggle("active",b===btn));
-  buildLayers();
-  if(playing)syncVoices();
- });
-});
-buildLayers();
-})();
-</script>
-</body>
-</html>
+      - name: Publier l'APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wells-Pad-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          
